@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Raindrop Escape Game</title>
+        <style>
+            #gameCanvas {
+                border: 2px solid black;
+                background-color: #f0f0f0;
+            }
+    
+            .player {
+                width: 40px;
+                height: 60px;
+                background-color: rgba(255, 255, 0, 0.7); /* 연한 노랑색 */
+                position: absolute;
+            }
+    
+            .raindrop {
+                width: 20px;
+                height: 20px;
+                background-color: skyblue; /* 하늘색 */
+                position: absolute;
+            }
+        </style>
+    </head>
+    <body>
+        <canvas id="gameCanvas" width="480" height="320"></canvas>
+        <script>
+            const canvas = document.getElementById("gameCanvas");
+            const ctx = canvas.getContext("2d");
+    
+            let playerX = canvas.width / 2 - 20;
+            let playerY = canvas.height - 100;
+            const playerWidth = 40;
+            const playerHeight = 60;
+            let playerSpeed = 15; // 플레이어 속도를 15로 변경
+    
+            let raindrops = [];
+    
+            document.addEventListener("keydown", movePlayer);
+    
+            function movePlayer(event) {
+                if (event.key === "ArrowLeft" && playerX > 0) {
+                    playerX -= playerSpeed;
+                } else if (event.key === "ArrowRight" && playerX < canvas.width - playerWidth) {
+                    playerX += playerSpeed;
+                }
+            }
+    
+            function createRaindrop() {
+                const raindropX = Math.random() * (canvas.width - 20);
+                const raindropY = -20;
+                const raindropWidth = 20;
+                const raindropHeight = 20;
+                const raindropSpeed = 3;
+    
+                raindrops.push({ x: raindropX, y: raindropY, width: raindropWidth, height: raindropHeight, speed: raindropSpeed });
+            }
+    
+            function gameLoop() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+                // 플레이어 그리기
+                ctx.fillStyle = "rgba(255, 255, 0, 0.7)"; // 연한 노랑색
+                ctx.fillRect(playerX, playerY, playerWidth, playerHeight);
+    
+                // 빗방울 그리기
+                for (let i = 0; i < raindrops.length; i++) {
+                    ctx.fillStyle = "skyblue"; // 하늘색
+                    ctx.fillRect(raindrops[i].x, raindrops[i].y, raindrops[i].width, raindrops[i].height);
+                    raindrops[i].y += raindrops[i].speed;
+    
+                    if (raindrops[i].y > canvas.height) {
+                        raindrops.splice(i, 1);
+                    }
+    
+                    if (
+                        playerX < raindrops[i].x + raindrops[i].width &&
+                        playerX + playerWidth > raindrops[i].x &&
+                        playerY < raindrops[i].y + raindrops[i].height &&
+                        playerY + playerHeight > raindrops[i].y
+                    ) {
+                        alert("Game Over!");
+                        document.location.reload();
+                    }
+                }
+    
+                if (Math.random() < 0.02) {
+                    createRaindrop();
+                }
+    
+                requestAnimationFrame(gameLoop);
+            }
+    
+            gameLoop();
+        </script>
+    </body>
+    </html>
+    , initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+</html>
